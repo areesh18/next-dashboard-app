@@ -16,7 +16,7 @@ const FormSchema = z.object({
 
 const CreateInvoice = FormSchema.omit({ id: true, date: true });
 const UpdateInvoice = FormSchema.omit({ id: true, date: true });
-export async function createInvoice(formData: FormData) {
+export async function createInvoice(formData: FormData): Promise<void> {
   const { customerId, amount, status } = CreateInvoice.parse({
     customerId: formData.get("customerId"),
     amount: formData.get("amount"),
@@ -32,9 +32,7 @@ export async function createInvoice(formData: FormData) {
   } catch (error) {
     // We'll also log the error to the console for now
     console.error(error);
-    return {
-      message: "Database Error: Failed to Create Invoice.",
-    };
+    
   }
   revalidatePath("/dashboard/invoices");
   redirect("/dashboard/invoices");
